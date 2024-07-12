@@ -1,3 +1,9 @@
+from functools import lru_cache
+from numba import jit
+import numpy as np
+
+# Gustavo solution: store the values of previously computed Fibonacci numbers
+@lru_cache(maxsize=None)
 def fibonacci(n):
     """
     Calculate the nth Fibonacci number recursively.
@@ -26,7 +32,20 @@ def fibonacci(n):
         return n
     return fibonacci(n - 1) + fibonacci(n - 2)
 
+# other option, not as fast as storing the values of previously computed Fibonacci numbers
+@jit(nopython=True, cache=True)
+def fibonacci_numba(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
 
-
+# very slow
+def fibonacci_numpy(n):
+    if n <= 1:
+        return n
+    else:
+        return np.sum(np.arange(n+1))
+    
 # n = 35
 # print(f"Trying this solution: Fibonacci({n}) = {fibonacci(n)}")
