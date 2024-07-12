@@ -1,5 +1,4 @@
-import random
-import math
+import numpy as np
 
 def calculate_uncertain_cuboid_statistics(n_sample, mean_length, mean_width, mean_height, range_length=0, range_width=0, range_height=0):
     '''
@@ -14,39 +13,34 @@ def calculate_uncertain_cuboid_statistics(n_sample, mean_length, mean_width, mea
     :return: tuple, The mean volume and standard deviation of the volume of the cuboid.
     '''
 
-    # Create a list to store the volumes of the cuboids
-    volumes = []
+    if (range_length == 0) and (range_width == 0) and (range_height == 0):
+        return mean_length * mean_width * mean_height, 0
+    
+    # Generate random dimensions for the cuboids
+    if range_length == 0:
+        dist_length = 0.0
+    else: 
+        dist_length = (range_length / 2) * np.random.uniform(-1, 1, n_sample)
 
-    # Loop over the number of samples
-    for i in range(n_sample): 
-        # Generate random dimensions for the cuboid
-        length = random.uniform(mean_length - range_length / 2, mean_length + range_length / 2)
-        width = random.uniform(mean_width - range_width / 2, mean_width + range_width / 2)
-        height = random.uniform(mean_height - range_height / 2, mean_height + range_height / 2)
+    if range_width == 0:
+        dist_width = 0.0
+    else: 
+        dist_width = (range_width / 2) * np.random.uniform(-1, 1, n_sample)
 
-        # Calculate the volume of the cuboid
-        volume = get_cuboid_volume(length, width, height)
-        # Add the volume to the list
-        volumes.append(volume)
+    if range_height == 0:
+        dist_height = 0.0
+    else: 
+        dist_height = (range_height / 2) * np.random.uniform(-1, 1, n_sample)
+
+    lengths = mean_length + dist_length
+    widths = mean_width + dist_width
+    heights = mean_height + dist_height
+    # Calculate the volumes of the cuboids
+    volumes = lengths * widths * heights
 
     # Calculate the mean and standard deviation of the volumes
-    mean_volume = sum(volumes) / n_sample
-    total_square = 0
-    for volume in volumes:
-        total_square = total_square + volume ** 2
-    std_volume = math.sqrt((total_square / n_sample) - mean_volume ** 2)
+    mean_volume = np.mean(volumes)
+    std_volume = np.std(volumes)
 
     # Return the mean and standard deviation of the volumes
     return mean_volume, std_volume
-
-
-def get_cuboid_volume(length, width, height):
-    '''
-    Calculate the volume of a cuboid.
-    :param length: float, The length of the cuboid.
-    :param width: float, The width of the cuboid.
-    :param height: float, The height of the cuboid.
-    :return: float, The volume of the cuboid.
-    '''
-    return length * width * height
-
