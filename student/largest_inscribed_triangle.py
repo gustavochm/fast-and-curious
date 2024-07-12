@@ -21,10 +21,14 @@ def largest_triangle_proof(n, radius):
     origin_x = 0.0
     origin_y = 0.0
 
-    #The lower this value the higher quality the circle is with more points generated
+# set the centre of the circle to (0,0)
+    origin_x = 0.0
+    origin_y = 0.0
+
+#The lower this value the higher quality the circle is with more points generated
     stepSize = 180/n
 
-    #Generated vertices
+#Generated vertices
     positions = []
 
     triangle_area = []
@@ -47,6 +51,7 @@ def largest_triangle_proof(n, radius):
 
     return(positions[largest_area_idx][1])
 
+
 def largest_triangle_area(n, radius, h=0.0):
     """
     Returns the largest area of a triangle that can be inscribed inside a
@@ -62,15 +67,12 @@ def largest_triangle_area(n, radius, h=0.0):
     """
     h = largest_triangle_proof(n, radius)
     # The largest triangle is an equilateral triangle
-    largest_A = []
+    largest_A = 0
     step = radius / n
     
     for d in np.arange(0, radius, step):
         base_length = 2 * math.sqrt(radius**2 - d**2)
         area = 0.5 * base_length * (d + h)
-        if len(largest_A) == 0:
-            largest_A.append(area)
-        elif area>=max(largest_A):
-            largest_A.append(area)
-    return max(largest_A)
-
+        if area > largest_A:
+            largest_A = area
+    return largest_A
