@@ -21,14 +21,12 @@ def largest_triangle_proof(n, radius):
     origin_x = 0.0
     origin_y = 0.0
 
-# set the centre of the circle to (0,0)
-    origin_x = 0.0
-    origin_y = 0.0
 
-#The lower this value the higher quality the circle is with more points generated
-    stepSize = 180/n
+    """
+    #The lower this value the higher quality the circle is with more points generated
+        stepSize = 180/n
 
-#Generated vertices
+    #Generated vertices
     positions = []
 
     triangle_area = []
@@ -46,10 +44,19 @@ def largest_triangle_proof(n, radius):
             positions.append((radius * math.cos(radian_t) + origin_x, radius * math.sin(radian_t) + origin_y))
             triangle_area.append(tmp_area)
         t += stepSize
-    
-    largest_area_idx = triangle_area.index(max(triangle_area))
 
+    largest_area_idx = triangle_area.index(max(triangle_area))
     return(positions[largest_area_idx][1])
+    """
+
+    radian_t = np.linspace(0, np.pi, n+1)
+    sin_t = np.sin(radian_t)
+    h = radius * sin_t
+    triangle_area = radius * h
+    positions = np.array([radius * np.cos(radian_t), h]).T
+    largest_area_idx = np.argmax(triangle_area)
+    return(positions[largest_area_idx][1])
+
 
 
 def largest_triangle_area(n, radius, h=0.0):
