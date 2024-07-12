@@ -20,9 +20,7 @@ def find_card_position(deck_size, instructions, card):
         elif instruction.startswith("deal"):
             position = deck_size - 1 - position
         elif instruction.startswith("shuffle"):
-            if position < deck_size // 2:
-                position *= 2
-            else:
-                position = 2 * (position - deck_size // 2) + 1
+            # Correctly handle Faro shuffle
+            position = (position * 2) % (deck_size - 1) if position < deck_size // 2 else (2 * position + 1) % deck_size
 
     return position
